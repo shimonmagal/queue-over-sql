@@ -1,12 +1,20 @@
+import java.util.concurrent.TimeUnit;
+
 public class QueueOverSql {
     private final String jdbcUrl;
     private final long messageTimeoutMillis;
     private final long backgroundThreadInterval;
 
-    public QueueOverSql(String jdbcUrl, long messageTimeoutMillis, long backgroundThreadInterval)
+    public QueueOverSql(String jdbcUrl, long messageTimeout, TimeUnit messageTimeoutUnit,
+                        long backgroundThreadInterval, TimeUnit backgroundThreadIntervalUnit)
     {
         this.jdbcUrl = jdbcUrl;
-        this.messageTimeoutMillis = messageTimeoutMillis;
-        this.backgroundThreadInterval = backgroundThreadInterval;
+        this.messageTimeoutMillis = TimeUnit.MILLISECONDS.convert(messageTimeout, messageTimeoutUnit);
+        this.backgroundThreadInterval = TimeUnit.MILLISECONDS.convert(backgroundThreadInterval, backgroundThreadIntervalUnit);
+    }
+
+    public void createQueue(String queueName)
+    {
+        Object sql = Operations.CREATE.bind(queueName);
     }
 }
