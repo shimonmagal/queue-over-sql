@@ -10,9 +10,6 @@ import java.util.concurrent.TimeUnit;
 public class QueueOverSqlTests {
     private final static String jdbcUrl = "jdbc:h2:mem:queueOverSqlTest";
 
-
-    private
-
     @Test
     public void test()
     {
