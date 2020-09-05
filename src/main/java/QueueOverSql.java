@@ -15,6 +15,6 @@ public class QueueOverSql {
 
     public void createQueue(String queueName)
     {
-        Object sql = Operations.CREATE.bind(queueName);
+        Object sql = Operations.CREATE.bindQueueName(queueName);
     }
 }
