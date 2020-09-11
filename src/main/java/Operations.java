@@ -1,9 +1,11 @@
 public enum Operations {
-    CREATE("CREATE TABLE IF NOT EXISTS $QUEUE");
+    CREATE("CREATE TABLE IF NOT EXISTS $QUEUE"),
+    PUBLISH("INSERT INTO $QUEUE values(?,?)"),
+    CONSUME("");
 
     private final String sqlTemplate;
 
-    private Operations(String sqlTeamplate)
+    Operations(String sqlTeamplate)
     {
         this.sqlTemplate = sqlTeamplate;
     }
