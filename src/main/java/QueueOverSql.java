@@ -18,6 +18,14 @@ public class QueueOverSql {
         execute(Operations.CREATE.bindQueueName(queueName));
     }
 
+    public String publishMessage(String queueName, String message)
+    {
+        execute(Operations.PUBLISH.bindQueueName(queueName));
+
+        String id = null; // get id
+        return id;
+    }
+
     private void execute(String sql)
     {
         
