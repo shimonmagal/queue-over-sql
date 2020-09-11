@@ -15,6 +15,11 @@ public class QueueOverSql {
 
     public void createQueue(String queueName)
     {
-        Object sql = Operations.CREATE.bindQueueName(queueName);
+        execute(Operations.CREATE.bindQueueName(queueName));
+    }
+
+    private void execute(String sql)
+    {
+        
     }
 }
