@@ -1,4 +1,3 @@
-
 # queue-over-sql
 This projects implement a priority queue (like SQS, RabbitMQ and others) over sql.
 Why? There are some cases where you can't install a queue, and all you have is an old fashioned sql server of some kind.
