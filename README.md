@@ -17,3 +17,4 @@ via the Java api you can also set a timeout, which means that if message wasn't 
 The solution supports multiple servers. If any of the servers dies, the messages that were being processes by that server, will reappear in the queue as well
 
 Note: It is advised to create all the queues in advaced. Since each queue creation translates into a CREATE TABLE operation, and that might fail in some cases (when the db is unavailable), and we don't try to recreate the queue if it failed, upon PUBLISH - so it is best to initialize the queue service when you server starts, and if that fails, to terminate the server so that you don't begin to use QueueOverSql before successful initializtion.
+That being said, you don't need to worry about failure if a table/queue already exists since we use a CREATE TABLE IF NOT EXISTS.
