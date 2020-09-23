@@ -18,9 +18,17 @@ public class QueueOverSql {
         execute(Operations.CREATE.bindQueueName(queueName));
     }
 
-    public String publishMessage(String queueName, String message)
+    public String publishTask(String queueName, String message)
     {
         execute(Operations.PUBLISH.bindQueueName(queueName));
+
+        String id = null; // get id
+        return id;
+    }
+
+    public String deleteTask(String queueName, String messageId)
+    {
+        execute(Operations.DELETE.bindQueueName(queueName));
 
         String id = null; // get id
         return id;
