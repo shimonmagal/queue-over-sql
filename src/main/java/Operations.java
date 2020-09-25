@@ -2,7 +2,8 @@ public enum Operations {
     CREATE("CREATE TABLE IF NOT EXISTS $QUEUE"),
     PUBLISH("INSERT INTO $QUEUE values(?,?)"),
     DELETE("DELETE FROM $QUEUE where messageId=?"),
-    CONSUME("");
+    CONSUME(""),
+    UNASSIGN_TIMEDOUT("");
 
     private final String sqlTemplate;
 
