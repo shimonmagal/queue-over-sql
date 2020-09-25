@@ -1,9 +1,11 @@
+import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 public class QueueOverSql {
     private final String jdbcUrl;
     private final long messageTimeoutMillis;
     private final long backgroundThreadInterval;
+    private final String uniqueInstanceIdentifier;
 
     public QueueOverSql(String jdbcUrl, long messageTimeout, TimeUnit messageTimeoutUnit,
                         long backgroundThreadInterval, TimeUnit backgroundThreadIntervalUnit)
@@ -11,6 +13,8 @@ public class QueueOverSql {
         this.jdbcUrl = jdbcUrl;
         this.messageTimeoutMillis = TimeUnit.MILLISECONDS.convert(messageTimeout, messageTimeoutUnit);
         this.backgroundThreadInterval = TimeUnit.MILLISECONDS.convert(backgroundThreadInterval, backgroundThreadIntervalUnit);
+
+        this.uniqueInstanceIdentifier = UUID.randomUUID().toString();
     }
 
     public void createQueue(String queueName)
@@ -18,20 +22,18 @@ public class QueueOverSql {
         execute(Operations.CREATE.bindQueueName(queueName));
     }
 
-    public String publishTask(String queueName, String message)
+    public long publishTask(String queueName, String message)
     {
+        long messageId = UUID.randomUUID().getLeastSignificantBits();
+
         execute(Operations.PUBLISH.bindQueueName(queueName));
 
-        String id = null; // get id
-        return id;
+        return messageId;
     }
 
-    public String deleteTask(String queueName, String messageId)
+    public String deleteTask(String queueName, long messageId)
     {
         execute(Operations.DELETE.bindQueueName(queueName));
-
-        String id = null; // get id
-        return id;
     }
 
     private void execute(String sql)
