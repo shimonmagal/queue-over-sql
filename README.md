@@ -20,3 +20,5 @@ Note: It is advised to create all the queues in advaced. Since each queue creati
 That being said, you don't need to worry about failure if a table/queue already exists since we use a CREATE TABLE IF NOT EXISTS.
 
 We support timed out messages - which means that if a message is being handled for too long time, it will be unassigned and made available in the queue again. The timeout is controllable from the ctor.
+
+We support also time out for a QueueOverSql instance that died an can no longer do keep-alive, to have all of its messages restored and made available back in the queue. This timeout is also controllable from the ctor by a different parameter.
