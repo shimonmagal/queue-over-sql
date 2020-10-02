@@ -19,26 +19,26 @@ public class QueueOverSql {
 
     public void createQueue(String queueName)
     {
-        execute(Operations.CREATE.bindQueueName(queueName));
+        executeWithParams(Operations.CREATE.bindQueueName(queueName));
     }
 
     public long publishTask(String queueName, String message)
     {
         long messageId = UUID.randomUUID().getLeastSignificantBits();
 
-        execute(Operations.PUBLISH.bindQueueName(queueName));
+        executeWithParams(Operations.PUBLISH.bindQueueName(queueName));
 
         return messageId;
     }
 
     public boolean deleteTask(String queueName, long messageId)
     {
-        execute(Operations.DELETE.bindQueueName(queueName));
+        executeWithParams(Operations.DELETE.bindQueueName(queueName));
         //return success
         return false;
     }
 
-    private void execute(String sql)
+    private void executeWithParams(String sql)
     {
         
     }
