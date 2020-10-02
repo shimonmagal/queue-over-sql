@@ -31,9 +31,11 @@ public class QueueOverSql {
         return messageId;
     }
 
-    public String deleteTask(String queueName, long messageId)
+    public boolean deleteTask(String queueName, long messageId)
     {
         execute(Operations.DELETE.bindQueueName(queueName));
+        //return success
+        return false;
     }
 
     private void execute(String sql)
