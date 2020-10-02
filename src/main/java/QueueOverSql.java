@@ -38,7 +38,7 @@ public class QueueOverSql {
         return false;
     }
 
-    private void executeWithParams(String sql)
+    private void executeWithParams(String sql, Object... params)
     {
         
     }
