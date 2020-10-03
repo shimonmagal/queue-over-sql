@@ -7,12 +7,15 @@ version '1.0-SNAPSHOT'
 
 repositories {
     mavenCentral()
+    jcenter()
 }
 
 dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.0'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
     testRuntimeOnly 'com.h2database:h2:1.4.200'
+
+    compile 'com.zaxxer:HikariCP:3.4.5'
 }
 
 test {
