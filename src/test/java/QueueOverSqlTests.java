@@ -7,10 +7,12 @@ public class QueueOverSqlTests {
     private final static String jdbcUrl = "jdbc:h2:mem:queueOverSqlTest";
 
     @Test
-    public void test()
+    public void testCreateQueue()
     {
-        new QueueOverSql(jdbcUrl, 30, TimeUnit.MINUTES, 20, TimeUnit.SECONDS);
+        QueueOverSql qos = new QueueOverSql(jdbcUrl, 30, TimeUnit.MINUTES, 20, TimeUnit.SECONDS);
 
-        Assertions.assertTrue(true);
+        boolean result = qos.createQueue("testQueue");
+
+        Assertions.assertTrue(result);
     }
 }
