@@ -1,3 +1,4 @@
+import java.sql.*;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
@@ -17,16 +18,16 @@ public class QueueOverSql {
         this.uniqueInstanceIdentifier = UUID.randomUUID().toString();
     }
 
-    public void createQueue(String queueName)
+    public boolean createQueue(String queueName)
     {
-        executeWithParams(Operations.CREATE.bindQueueName(queueName));
+        return executeWithParams(Operations.CREATE.bindQueueName(queueName));
     }
 
     public long publishTask(String queueName, String message)
     {
         long messageId = UUID.randomUUID().getLeastSignificantBits();
 
-        executeWithParams(Operations.PUBLISH.bindQueueName(queueName));
+        executeWithParams(Operations.PUBLISH.bindQueueName(queueName), messageId, message);
 
         return messageId;
     }
@@ -38,8 +39,36 @@ public class QueueOverSql {
         return false;
     }
 
-    private void executeWithParams(String sql, Object... params)
+    private boolean executeWithParams(String sql, Object... params)
     {
-        ConnectionManag
+        try (Connection connection = DriverManager.getConnection(jdbcUrl);)
+        {
+            try (PreparedStatement ps = connection.prepareStatement(sql))
+            {
+                for (int i = 0 ; i < params.length; i++)
+                {
+                    ps.setObject(i + 1, params[i]);
+                }
+
+                if (ps.execute())
+                {
+                    try (ResultSet rs = ps.getResultSet())
+                    {
+                        while (rs.next())
+                        {
+
+                        }
+                    }
+                }
+            }
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
+
+            return false;
+        }
+
+        return true;
     }
 }
