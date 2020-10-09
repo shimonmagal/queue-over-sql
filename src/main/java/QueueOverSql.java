@@ -1,8 +1,13 @@
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.sql.*;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 public class QueueOverSql {
+    private static final Logger logger = LoggerFactory.getLogger(QueueOverSql.class);
+
     private final String jdbcUrl;
     private final long messageTimeoutMillis;
     private final long backgroundThreadInterval;
@@ -66,6 +71,7 @@ public class QueueOverSql {
         {
             e.printStackTrace();
 
+            logger.
             return false;
         }
 
