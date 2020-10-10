@@ -69,9 +69,7 @@ public class QueueOverSql {
         }
         catch (SQLException e)
         {
-            e.printStackTrace();
-
-            logger.
+            logger.error("SQL operation", e);
             return false;
         }
 
