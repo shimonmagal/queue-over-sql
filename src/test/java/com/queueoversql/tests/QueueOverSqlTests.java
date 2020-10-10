@@ -1,5 +1,9 @@
+package com.queueoversql.tests;
+
+import com.queueoversql.QueueOverSql;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+
 
 import java.util.concurrent.TimeUnit;
 
