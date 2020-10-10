@@ -22,3 +22,6 @@ That being said, you don't need to worry about failure if a table/queue already 
 We support timed out messages - which means that if a message is being handled for too long time, it will be unassigned and made available in the queue again. The timeout is controllable from the ctor.
 
 We support also timeout for a QueueOverSql instance that died an can no longer do keep-alive, to have all of its messages restored and made available back in the queue. This timeout is also controllable from the ctor by a different parameter.
+
+TODO:
+Support hikary or maybe generic DataSources being passed
