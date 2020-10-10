@@ -1,3 +1,5 @@
+package com.queueoversql;
+
 public enum Operations {
     CREATE("CREATE TABLE IF NOT EXISTS $QUEUE(" +
             "id long NOT NULL," +
