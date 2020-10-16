@@ -8,7 +8,7 @@ public enum Operations {
             "publish_time long," +
             "consume_time long," +
             "ttl long)"),
-    PUBLISH("INSERT INTO $QUEUE values(?,?)"),
+    PUBLISH("INSERT INTO $QUEUE (id, message) values(?,?)"),
     DELETE("DELETE FROM $QUEUE where messageId=?"),
     CONSUME(""),
     UNASSIGN_TIMEDOUT("");
