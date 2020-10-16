@@ -30,11 +30,16 @@ public class QueueOverSql {
         return executeWithParams(Operations.CREATE.bindQueueName(queueName));
     }
 
-    public long publishTask(String queueName, String message)
+    public Long publishTask(String queueName, String message)
     {
         long messageId = UUID.randomUUID().getLeastSignificantBits();
 
-        executeWithParams(Operations.PUBLISH.bindQueueName(queueName), messageId, message);
+        boolean result = executeWithParams(Operations.PUBLISH.bindQueueName(queueName), messageId, message);
+
+        if (!result)
+        {
+            return null;
+        }
 
         return messageId;
     }
