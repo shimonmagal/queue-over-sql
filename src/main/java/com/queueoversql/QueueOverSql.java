@@ -34,7 +34,7 @@ public class QueueOverSql {
     {
         long messageId = UUID.randomUUID().getLeastSignificantBits();
 
-        boolean result = executeWithParams(Operations.PUBLISH.bindQueueName(queueName), messageId, message);
+        boolean result = executeWithParams(Operations.PUBLISH.bindQueueName(queueName), messageId, message, System.currentTimeMillis());
 
         if (!result)
         {
@@ -46,7 +46,7 @@ public class QueueOverSql {
 
     public boolean deleteTask(String queueName, long messageId)
     {
-        executeWithParams(Operations.DELETE.bindQueueName(queueName));
+        executeWithParams(Operations.DELETE.bindQueueName(queueName), messageId);
         //return success
         return false;
     }
