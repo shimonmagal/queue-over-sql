@@ -46,9 +46,7 @@ public class QueueOverSql {
 
     public boolean deleteTask(String queueName, long messageId)
     {
-        executeWithParams(Operations.DELETE.bindQueueName(queueName), messageId);
-        //return success
-        return false;
+        return executeWithParams(Operations.DELETE.bindQueueName(queueName), messageId);
     }
 
     private boolean executeWithParams(String sql, Object... params)
