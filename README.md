@@ -10,7 +10,7 @@ PUBLISH(queue_name, message) - puts a new message in the given queue
 
 CONSUME(queue_name, count) - gets {count} messages from queue, in FIFO order
 
-DELETE(queue_name, messageId) - removes message
+DELETE(queue_name, messageId) - deletes message (this should usually be called after consumer finished handling task)
 
 via the Java api you can also set a timeout, which means that if message wasn't handled in X seconds, it will be reappear again in the queue, allowing others to consume it
 
