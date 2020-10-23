@@ -5,11 +5,13 @@ public enum Operations {
             "id long NOT NULL," +
             "message VARCHAR(10000)," +
             "consumer_id VARCHAR(128)," +
+            "consumer_round long," +
             "publish_time long," +
             "consume_time long," +
             "ttl long)"),
     PUBLISH("INSERT INTO $QUEUE (id, message, publish_time) values(?,?,?)"),
     DELETE("DELETE FROM $QUEUE where id=?"),
+    MARK_BEFORE_CONSUME(""),
     CONSUME(""),
     UNASSIGN_TIMEDOUT("");
 

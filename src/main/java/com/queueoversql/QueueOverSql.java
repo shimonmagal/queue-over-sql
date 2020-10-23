@@ -14,6 +14,7 @@ public class QueueOverSql {
     private final long messageTimeoutMillis;
     private final long backgroundThreadInterval;
     private final String uniqueInstanceIdentifier;
+    private final long consumerRound;
 
     public QueueOverSql(String jdbcUrl, long messageTimeout, TimeUnit messageTimeoutUnit,
                         long backgroundThreadInterval, TimeUnit backgroundThreadIntervalUnit)
@@ -23,6 +24,7 @@ public class QueueOverSql {
         this.backgroundThreadInterval = TimeUnit.MILLISECONDS.convert(backgroundThreadInterval, backgroundThreadIntervalUnit);
 
         this.uniqueInstanceIdentifier = UUID.randomUUID().toString();
+        this.consumerRound = 0l;
     }
 
     public boolean createQueue(String queueName)
