@@ -27,12 +27,14 @@ public class QueueOverSql {
 
     public boolean createQueue(String queueName)
     {
+        logger.debug("Creating queue {}", queueName);
         return executeWithParams(Operations.CREATE.bindQueueName(queueName));
     }
 
     public Long publishTask(String queueName, String message)
     {
         long messageId = UUID.randomUUID().getLeastSignificantBits();
+        logger.debug("Publishing new task with id {} to queue {}", messageId, queueName);
 
         boolean result = executeWithParams(Operations.PUBLISH.bindQueueName(queueName), messageId, message, System.currentTimeMillis());
 
@@ -46,6 +48,8 @@ public class QueueOverSql {
 
     public boolean deleteTask(String queueName, long messageId)
     {
+        logger.debug("Deleting task with id {} from queue {}", messageId, queueName);
+
         return executeWithParams(Operations.DELETE.bindQueueName(queueName), messageId);
     }
 
@@ -74,7 +78,7 @@ public class QueueOverSql {
         }
         catch (SQLException e)
         {
-            logger.error("SQL operation", e);
+            logger.error("SQL operation failed", e);
             return false;
         }
 
