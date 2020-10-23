@@ -8,10 +8,12 @@ public enum Operations {
             "consumer_round long," +
             "publish_time long," +
             "consume_time long," +
-            "ttl long)"),
+            "ttl long," +
+            "PRIMARY KEY (id))"),
+
     PUBLISH("INSERT INTO $QUEUE (id, message, publish_time) values(?,?,?)"),
     DELETE("DELETE FROM $QUEUE where id=?"),
-    MARK_BEFORE_CONSUME(""),
+    MARK_BEFORE_CONSUME("UPDATE $QUEUE SET consumer_id=?, consumer_round=?, "),
     CONSUME(""),
     UNASSIGN_TIMEDOUT("");
 
