@@ -30,7 +30,12 @@ public class QueueOverSql {
     public boolean createQueue(String queueName)
     {
         logger.debug("Creating queue {}", queueName);
-        return executeWithParams(Operations.CREATE.bindQueueName(queueName));
+        boolean result = executeWithParams(Operations.CREATE.bindQueueName(queueName));
+
+        for (String field : Operations.fieldsForIndexing)
+        {
+            Operations.INDEX.bindQueueAndFieldName(queueName, field);
+        }
     }
 
     public Long publishTask(String queueName, String message)

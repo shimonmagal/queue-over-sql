@@ -10,7 +10,7 @@ public enum Operations {
             "consume_time long," +
             "ttl long," +
             "PRIMARY KEY (id))"),
-
+    INDEX("ALTER TABLE $QUEUE ADD INDEX($FIELD_NAME)"),
     PUBLISH("INSERT INTO $QUEUE (id, message, publish_time) values(?,?,?)"),
     DELETE("DELETE FROM $QUEUE where id=?"),
     MARK_BEFORE_CONSUME("UPDATE $QUEUE SET consumer_id=?, consumer_round=?, "),
@@ -18,6 +18,8 @@ public enum Operations {
     UNASSIGN_TIMEDOUT("");
 
     private final String sqlTemplate;
+
+    public static String[] fieldsForIndexing = {"id", "consumer_id", "consumer_id", "consume_time", "publish_time", "ttl"};
 
     Operations(String sqlTeamplate)
     {
@@ -27,5 +29,12 @@ public enum Operations {
     String bindQueueName(String queueName)
     {
         return sqlTemplate.replace("$QUEUE", queueName);
+    }
+
+    String bindQueueAndFieldName(String queueName, String fieldName)
+    {
+        String sqlTemplateWithQueueName = bindQueueName(queueName);
+
+        return sqlTemplateWithQueueName.replace("$FIELD_NAME", fieldName);
     }
 }
