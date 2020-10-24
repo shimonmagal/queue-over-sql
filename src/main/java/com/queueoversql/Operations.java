@@ -10,7 +10,7 @@ public enum Operations {
             "consume_time long," +
             "ttl long," +
             "PRIMARY KEY (id))"),
-    INDEX("ALTER TABLE $QUEUE ADD INDEX($FIELD_NAME)"),
+    INDEX("CREATE INDEX IF NOT EXISTS $FIELD_NAME_idx ON $QUEUE($FIELD_NAME)"),
     PUBLISH("INSERT INTO $QUEUE (id, message, publish_time) values(?,?,?)"),
     DELETE("DELETE FROM $QUEUE where id=?"),
     MARK_BEFORE_CONSUME("UPDATE $QUEUE SET consumer_id=?, consumer_round=?, "),
@@ -19,7 +19,7 @@ public enum Operations {
 
     private final String sqlTemplate;
 
-    public static String[] fieldsForIndexing = {"id", "consumer_id", "consumer_id", "consume_time", "publish_time", "ttl"};
+    public static String[] fieldsForIndexing = {"id", "consumer_id", "consumer_round", "consume_time", "publish_time", "ttl"};
 
     Operations(String sqlTeamplate)
     {
