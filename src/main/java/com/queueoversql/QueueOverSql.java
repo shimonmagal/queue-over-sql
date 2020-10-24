@@ -34,8 +34,12 @@ public class QueueOverSql {
 
         for (String field : Operations.fieldsForIndexing)
         {
-            Operations.INDEX.bindQueueAndFieldName(queueName, field);
+            String sql = Operations.INDEX.bindQueueAndFieldName(queueName, field);
+
+            result &= executeWithParams(sql);
         }
+
+        return result;
     }
 
     public Long publishTask(String queueName, String message)
