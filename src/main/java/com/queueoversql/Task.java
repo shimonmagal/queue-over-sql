@@ -1,2 +1,6 @@
-package com.queueoversql;public class Task {
+package com.queueoversql;
+
+public class Task
+{
+    
 }

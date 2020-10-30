@@ -64,6 +64,11 @@ public class QueueOverSql {
         return executeWithParams(Operations.DELETE.bindQueueName(queueName), messageId);
     }
 
+    public List<Task> consume(String queueName, int count)
+    {
+
+    }
+
     private boolean executeWithParams(String sql, Object... params)
     {
         try (Connection connection = DriverManager.getConnection(jdbcUrl);)
