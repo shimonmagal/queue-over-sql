@@ -20,6 +20,8 @@ public enum Operations {
     private final String sqlTemplate;
 
     public static String[] fieldsForIndexing = {"id", "consumer_id", "consumer_round", "consume_time", "publish_time", "ttl"};
+    public static final String ID_FIELD = "id";
+    public static final String MESSAGE_FIELD = "message";
 
     Operations(String sqlTeamplate)
     {

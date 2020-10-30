@@ -86,7 +86,10 @@ public class QueueOverSql {
                     {
                         while (rs.next())
                         {
-                            // tasks
+                            long messageId = rs.getLong(Operations.ID_FIELD);
+                            String messageBody = rs.getString(Operations.MESSAGE_FIELD);
+
+                            tasks.add(new Task(messageId, messageBody));
                         }
                     }
                 }
