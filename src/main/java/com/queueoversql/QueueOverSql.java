@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.sql.*;
+import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
@@ -66,7 +67,7 @@ public class QueueOverSql {
 
     public List<Task> consume(String queueName, int count)
     {
-
+        return null;
     }
 
     private boolean executeWithParams(String sql, Object... params)
