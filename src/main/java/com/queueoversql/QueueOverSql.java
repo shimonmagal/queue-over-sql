@@ -66,7 +66,7 @@ public class QueueOverSql {
 
     private boolean executeWithParams(String sql, Object... params)
     {
-        executeWithParams(sql, new LinkedList<>(), params);
+        return executeWithParams(sql, new LinkedList<>(), params);
     }
 
     private boolean executeWithParams(String sql, List<Task> tasks, Object... params)
