@@ -14,15 +14,15 @@ public class QueueOverSql {
 
     private final String jdbcUrl;
     private final long messageTimeoutMillis;
-    private final long backgroundThreadInterval;
+    private final long ttlTimeoutMillis;
     private final String uniqueInstanceIdentifier;
-    private final long consumerRound;
+    private long consumerRound;
 
     public QueueOverSql(String jdbcUrl, long messageTimeout, TimeUnit messageTimeoutUnit,
-                        long backgroundThreadInterval, TimeUnit backgroundThreadIntervalUnit) {
+                        long ttlTimeout, TimeUnit backgroundThreadIntervalUnit) {
         this.jdbcUrl = jdbcUrl;
         this.messageTimeoutMillis = TimeUnit.MILLISECONDS.convert(messageTimeout, messageTimeoutUnit);
-        this.backgroundThreadInterval = TimeUnit.MILLISECONDS.convert(backgroundThreadInterval, backgroundThreadIntervalUnit);
+        this.ttlTimeoutMillis = TimeUnit.MILLISECONDS.convert(ttlTimeout, backgroundThreadIntervalUnit);
 
         this.uniqueInstanceIdentifier = UUID.randomUUID().toString();
         this.consumerRound = 0l;
@@ -54,16 +54,33 @@ public class QueueOverSql {
         return messageId;
     }
 
-    public boolean deleteTask(String queueName, long messageId) {
+    public boolean deleteTask(String queueName, long messageId)
+    {
         logger.debug("Deleting task with id {} from queue {}", messageId, queueName);
 
         return executeWithParams(Operations.DELETE.bindQueueName(queueName), messageId);
     }
 
-    public List<Task> consume(String queueName, int count) {
+    public List<Task> consume(String queueName, int count)
+    {
+        logger.debug("Consuming {} tasks from queue {}", count, queueName);
 
+        String markBeforeConsumeSql = Operations.MARK_BEFORE_CONSUME.bindQueueName(queueName);
+        consumerRound++;
 
-        executeWithParams()
+        long now = System.currentTimeMillis();
+        long lastMessageTimeout = now - messageTimeoutMillis;
+        long lastTTL = now - ttlTimeoutMillis;
+
+        if (!executeWithParams(markBeforeConsumeSql, uniqueInstanceIdentifier, consumerRound, lastMessageTimeout,
+                lastTTL, count))
+        {
+            return null;
+        }
+
+        String consumeSql = Operations.CONSUME.bindQueueName(queueName);
+
+        executeWithParams(consumeSql, )
 
 
         return null;
