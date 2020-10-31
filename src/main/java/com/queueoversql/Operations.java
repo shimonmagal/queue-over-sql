@@ -13,7 +13,14 @@ public enum Operations {
     INDEX("CREATE INDEX IF NOT EXISTS $FIELD_NAME_idx ON $QUEUE($FIELD_NAME)"),
     PUBLISH("INSERT INTO $QUEUE (id, message, publish_time) values(?,?,?)"),
     DELETE("DELETE FROM $QUEUE where id=?"),
-    MARK_BEFORE_CONSUME("UPDATE $QUEUE SET consumer_id=?, consumer_round=?, "),
+    MARK_BEFORE_CONSUME("UPDATE $QUEUE SET consumer_id=?, consumer_round=? WHERE id=(" +
+            "select id from (" +
+            "   select id from (" +
+            "       select * from ORDER BY publish_time DESC" +
+            "   )" +
+            "   WHERE consumer_time is NULL OR )" +
+            "limit ?"
+            ")"),
     CONSUME(""),
     UNASSIGN_TIMEDOUT("");
 
