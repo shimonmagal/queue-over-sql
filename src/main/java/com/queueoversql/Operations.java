@@ -18,9 +18,8 @@ public enum Operations {
             "   select id from (" +
             "       select * from ORDER BY publish_time DESC" +
             "   )" +
-            "   WHERE consumer_time is NULL OR )" +
-            "limit ?"
-            ")"),
+            "   WHERE consume_time is NULL OR consume_time < ? OR ttl < ?)" +
+            "limit ?)"),
     CONSUME(""),
     UNASSIGN_TIMEDOUT("");
 
