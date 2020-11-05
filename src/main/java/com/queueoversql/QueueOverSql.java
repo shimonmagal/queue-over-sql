@@ -80,10 +80,16 @@ public class QueueOverSql {
 
         String consumeSql = Operations.CONSUME.bindQueueName(queueName);
 
-        executeWithParams(consumeSql, )
+        List<Task> tasks = new LinkedList<>();
 
+        if (!executeWithParams(consumeSql, tasks, uniqueInstanceIdentifier, consumerRound))
+        {
+            return null;
+        }
 
-        return null;
+        logger.debug("Consumed {} tasks from queue {}", tasks.size(), queueName);
+
+        return tasks;
     }
 
     private boolean executeWithParams(String sql, Object... params)

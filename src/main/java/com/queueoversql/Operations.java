@@ -21,7 +21,7 @@ public enum Operations {
             "   WHERE consume_time is NULL OR consume_time < ? OR ttl < ?)" +
             "limit ?)"),
     CONSUME("SELECT FROM $QUEUE WHERE consumer_id=? AND consumer_round=?"),
-    UNASSIGN_TIMEDOUT("");
+    UPDATE_TTL("UPDATE $QUEUE SET ttl=? WHERE consumer_id=?");
 
     private final String sqlTemplate;
 
