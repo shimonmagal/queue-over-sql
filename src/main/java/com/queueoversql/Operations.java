@@ -20,7 +20,7 @@ public enum Operations {
             "   )" +
             "   WHERE consume_time is NULL OR consume_time < ? OR ttl < ?)" +
             "limit ?)"),
-    CONSUME(""),
+    CONSUME("SELECT FROM $QUEUE WHERE consumer_id=? AND consumer_round=?"),
     UNASSIGN_TIMEDOUT("");
 
     private final String sqlTemplate;
