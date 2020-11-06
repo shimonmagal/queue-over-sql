@@ -72,7 +72,7 @@ public class QueueOverSql {
         long lastMessageTimeout = now - messageTimeoutMillis;
         long lastTTL = now - ttlTimeoutMillis;
 
-        if (!executeWithParams(markBeforeConsumeSql, uniqueInstanceIdentifier, consumerRound, lastMessageTimeout,
+        if (!executeWithParams(markBeforeConsumeSql, uniqueInstanceIdentifier, consumerRound, now, lastMessageTimeout,
                 lastTTL, count))
         {
             return null;
