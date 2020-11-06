@@ -15,12 +15,12 @@ public enum Operations {
     DELETE("DELETE FROM $QUEUE where id=?"),
     MARK_BEFORE_CONSUME("UPDATE $QUEUE SET consumer_id=?, consumer_round=? WHERE id IN (" +
             "select id from (" +
-            "   select id from (" +
-            "       select * from ORDER BY publish_time DESC" +
+            "   select * from (" +
+            "       select * from $QUEUE ORDER BY publish_time DESC" +
             "   )" +
             "   WHERE consume_time is NULL OR consume_time < ? OR ttl < ?)" +
             "limit ?)"),
-    CONSUME("SELECT FROM $QUEUE WHERE consumer_id=? AND consumer_round=?"),
+    CONSUME("SELECT id, message FROM $QUEUE WHERE consumer_id=? AND consumer_round=?"),
     UPDATE_TTL("UPDATE $QUEUE SET ttl=? WHERE consumer_id=?");
 
     private final String sqlTemplate;
