@@ -1,10 +1,12 @@
 package com.queueoversql.tests;
 
 import com.queueoversql.QueueOverSql;
+import com.queueoversql.Task;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 public class QueueOverSqlTests {
@@ -44,6 +46,39 @@ public class QueueOverSqlTests {
         result = qos.deleteTask(queueName, id);
 
         Assertions.assertTrue(result);
+    }
+
+    @Test
+    public void testCreateInsertConsume()
+    {
+        final String queueName = "testQueue";
+
+        QueueOverSql qos = new QueueOverSql(jdbcUrl, 30, TimeUnit.MINUTES, 20, TimeUnit.SECONDS);
+
+        boolean result = qos.createQueue(queueName);
+
+        if (!result)
+        {
+            Assertions.assertTrue(false);
+        }
+
+        for (int i = 0 ; i < 10; i++)
+        {
+            Long id = qos.publishTask(queueName, "{task: handleEverything}");
+
+            if (id == null)
+            {
+                Assertions.assertTrue(false);
+            }
+        }
+
+        List<Task> tasks = qos.consume(queueName, 3);
+
+        Assertions.assertEquals(3, tasks.size());
+
+        tasks = qos.consume(queueName, 25);
+
+        Assertions.assertEquals(7, tasks.size());
     }
 
 }
