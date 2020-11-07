@@ -33,14 +33,14 @@ public class QueueOverSqlTests {
 
         if (!result)
         {
-            Assertions.assertTrue(false);
+            Assertions.fail();
         }
 
         Long id = qos.publishTask(queueName, "{task: handleEverything}");
 
         if (id == null)
         {
-            Assertions.assertTrue(false);
+            Assertions.fail();
         }
 
         result = qos.deleteTask(queueName, id);
@@ -59,7 +59,7 @@ public class QueueOverSqlTests {
 
         if (!result)
         {
-            Assertions.assertTrue(false);
+            Assertions.fail();
         }
 
         for (int i = 0 ; i < 10; i++)
@@ -68,7 +68,7 @@ public class QueueOverSqlTests {
 
             if (id == null)
             {
-                Assertions.assertTrue(false);
+                Assertions.fail();
             }
         }
 
@@ -81,4 +81,44 @@ public class QueueOverSqlTests {
         Assertions.assertEquals(7, tasks.size());
     }
 
+    @Test
+    public void testCreateInsertConsumeAndDelete()
+    {
+        final String queueName = "testQueue";
+
+        QueueOverSql qos = new QueueOverSql(jdbcUrl, 30, TimeUnit.MINUTES, 20, TimeUnit.SECONDS);
+
+        boolean result = qos.createQueue(queueName);
+
+        if (!result)
+        {
+            Assertions.fail();
+        }
+
+        for (int i = 0 ; i < 10; i++)
+        {
+            Long id = qos.publishTask(queueName, "{task: handleEverything}");
+
+            if (id == null)
+            {
+                Assertions.fail();
+            }
+        }
+
+        List<Task> tasks = qos.consume(queueName, 3);
+
+        Assertions.assertEquals(3, tasks.size());
+
+        List<Task> moreTasks = qos.consume(queueName, 25);
+
+        Assertions.assertEquals(7, tasks.size());
+
+        for (Task task : tasks)
+        {
+            if (!qos.deleteTask(queueName, task.id))
+            {
+                Assertions.fail();
+            }
+        }
+    }
 }
