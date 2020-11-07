@@ -84,9 +84,9 @@ public class QueueOverSqlTests {
     @Test
     public void testCreateInsertConsumeAndDelete()
     {
-        final String queueName = "testQueue";
+        final String queueName = "testQueue2";
 
-        QueueOverSql qos = new QueueOverSql(jdbcUrl, 30, TimeUnit.MINUTES, 20, TimeUnit.SECONDS);
+        QueueOverSql qos = new QueueOverSql(jdbcUrl, 30, TimeUnit.MINUTES, 60, TimeUnit.SECONDS);
 
         boolean result = qos.createQueue(queueName);
 
@@ -111,9 +111,17 @@ public class QueueOverSqlTests {
 
         List<Task> moreTasks = qos.consume(queueName, 25);
 
-        Assertions.assertEquals(7, tasks.size());
+        Assertions.assertEquals(7, moreTasks.size());
 
         for (Task task : tasks)
+        {
+            if (!qos.deleteTask(queueName, task.id))
+            {
+                Assertions.fail();
+            }
+        }
+
+        for (Task task : moreTasks)
         {
             if (!qos.deleteTask(queueName, task.id))
             {
