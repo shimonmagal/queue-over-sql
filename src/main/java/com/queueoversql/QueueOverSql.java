@@ -103,6 +103,18 @@ public class QueueOverSql {
         return tasks;
     }
 
+    public void ttl()
+    {
+        for (String queueName: allQueues.keySet())
+        {
+            String updateTTLSql = Operations.UPDATE_TTL.bindQueueName(queueName);
+
+            long now = System.currentTimeMillis();
+
+            executeWithParams(updateTTLSql, now, uniqueInstanceIdentifier);
+        }
+    }
+    
     private boolean executeWithParams(String sql, Object... params)
     {
         return executeWithParams(sql, new LinkedList<>(), params);
@@ -141,17 +153,5 @@ public class QueueOverSql {
         }
 
         return true;
-    }
-
-    public void ttl()
-    {
-        for (String queueName: allQueues.keySet())
-        {
-            String updateTTLSql = Operations.UPDATE_TTL.bindQueueName(queueName);
-
-            long now = System.currentTimeMillis();
-
-            executeWithParams(updateTTLSql, now, uniqueInstanceIdentifier);
-        }
     }
 }
