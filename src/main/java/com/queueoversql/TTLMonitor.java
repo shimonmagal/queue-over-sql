@@ -2,6 +2,7 @@ package com.queueoversql;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class TTLMonitor
 {
@@ -23,6 +24,6 @@ public class TTLMonitor
             public void run() {
                 qos.ttl();
             }
-        }, 0, ttlTimeout);
+        }, 0l, ttlTimeout, TimeUnit.MILLISECONDS);
     }
 }

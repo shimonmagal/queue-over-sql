@@ -145,6 +145,13 @@ public class QueueOverSql {
 
     public void ttl()
     {
-        for (String queue)
+        for (String queueName: allQueues.keySet())
+        {
+            String updateTTLSql = Operations.UPDATE_TTL.bindQueueName(queueName);
+
+            long now = System.currentTimeMillis();
+
+            executeWithParams(updateTTLSql, now, uniqueInstanceIdentifier);
+        }
     }
 }
