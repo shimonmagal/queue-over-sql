@@ -7,6 +7,8 @@ import java.sql.*;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.TimeUnit;
 
 public class QueueOverSql {
@@ -16,6 +18,8 @@ public class QueueOverSql {
     private final long messageTimeoutMillis;
     private final long ttlTimeoutMillis;
     private final String uniqueInstanceIdentifier;
+
+    private final ConcurrentMap<String, Boolean> allQueues = new ConcurrentHashMap<>();
     private long consumerRound;
 
     public QueueOverSql(String jdbcUrl, long messageTimeout, TimeUnit messageTimeoutUnit,
@@ -35,7 +39,14 @@ public class QueueOverSql {
         for (String field : Operations.fieldsForIndexing) {
             String sql = Operations.INDEX.bindQueueAndFieldName(queueName, field);
 
-            result &= executeWithParams(sql);
+            boolean queueCreated = executeWithParams(sql);
+
+            if (queueCreated)
+            {
+                allQueues.put(queueName, true);
+            }
+
+            result &= queueCreated;
         }
 
         return result;
@@ -130,5 +141,10 @@ public class QueueOverSql {
         }
 
         return true;
+    }
+
+    public void ttl()
+    {
+        for (String queue)
     }
 }

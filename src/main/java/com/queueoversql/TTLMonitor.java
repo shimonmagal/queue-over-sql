@@ -1,18 +1,28 @@
 package com.queueoversql;
 
 import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
 
 public class TTLMonitor
 {
     private final long ttlTimeout;
+    private final QueueOverSql qos;
 
-    TTLMonitor(long ttlTimeout)
+    TTLMonitor(long ttlTimeout, QueueOverSql qos)
     {
         this.ttlTimeout = ttlTimeout;
+        this.qos = qos;
     }
 
     void init()
     {
-        Executors.newScheduledThreadPool(1);
+        ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
+
+        executor.scheduleAtFixedRate(new Runnable() {
+            @Override
+            public void run() {
+                qos.ttl();
+            }
+        }, 0, ttlTimeout);
     }
 }
