@@ -20,8 +20,6 @@ public class TTLMonitor
 
     void init()
     {
-         = Executors.newSingleThreadScheduledExecutor();
-
         executor.scheduleAtFixedRate(new Runnable() {
             @Override
             public void run() {
@@ -30,8 +28,8 @@ public class TTLMonitor
         }, 0l, ttlTimeout, TimeUnit.MILLISECONDS);
     }
 
-    @Override
-    protected void finalize() throws Throwable {
-        super.finalize();
+    void desroty()
+    {
+        executor.shutdownNow()
     }
 }
