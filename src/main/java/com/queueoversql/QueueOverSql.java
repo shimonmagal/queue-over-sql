@@ -17,7 +17,7 @@ public class QueueOverSql {
     private final String jdbcUrl;
     private final long messageTimeoutMillis;
     private final long ttlTimeoutMillis;
-    private final String uniqueInstanceIdentifier;
+    private final String uniqueConsumerId;
 
     private final ConcurrentMap<String, Boolean> allQueues = new ConcurrentHashMap<>();
     private long consumerRound;
@@ -28,7 +28,7 @@ public class QueueOverSql {
         this.messageTimeoutMillis = TimeUnit.MILLISECONDS.convert(messageTimeout, messageTimeoutUnit);
         this.ttlTimeoutMillis = TimeUnit.MILLISECONDS.convert(ttlTimeout, backgroundThreadIntervalUnit);
 
-        this.uniqueInstanceIdentifier = UUID.randomUUID().toString();
+        this.uniqueConsumerId = UUID.randomUUID().toString();
         this.consumerRound = 0l;
     }
 
@@ -83,7 +83,7 @@ public class QueueOverSql {
         long lastMessageTimeout = now - messageTimeoutMillis;
         long lastTTL = now - ttlTimeoutMillis;
 
-        if (!executeWithParams(markBeforeConsumeSql, uniqueInstanceIdentifier, consumerRound, now, lastMessageTimeout,
+        if (!executeWithParams(markBeforeConsumeSql, uniqueConsumerId, consumerRound, now, lastMessageTimeout,
                 lastTTL, count))
         {
             return null;
@@ -93,7 +93,7 @@ public class QueueOverSql {
 
         List<Task> tasks = new LinkedList<>();
 
-        if (!executeWithParams(consumeSql, tasks, uniqueInstanceIdentifier, consumerRound))
+        if (!executeWithParams(consumeSql, tasks, uniqueConsumerId, consumerRound))
         {
             return null;
         }
@@ -111,10 +111,10 @@ public class QueueOverSql {
 
             long now = System.currentTimeMillis();
 
-            executeWithParams(updateTTLSql, now, uniqueInstanceIdentifier);
+            executeWithParams(updateTTLSql, now, uniqueConsumerId);
         }
     }
-    
+
     private boolean executeWithParams(String sql, Object... params)
     {
         return executeWithParams(sql, new LinkedList<>(), params);
