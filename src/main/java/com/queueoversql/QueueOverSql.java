@@ -18,8 +18,10 @@ public class QueueOverSql {
     private final long messageTimeoutMillis;
     private final long ttlTimeoutMillis;
     private final String uniqueConsumerId;
+    private final TTLMonitor ttlMonitor;
 
     private final ConcurrentMap<String, Boolean> allQueues = new ConcurrentHashMap<>();
+
     private long consumerRound;
 
     public QueueOverSql(String jdbcUrl, long messageTimeout, TimeUnit messageTimeoutUnit,
@@ -30,6 +32,8 @@ public class QueueOverSql {
 
         this.uniqueConsumerId = UUID.randomUUID().toString();
         this.consumerRound = 0l;
+
+        this.ttlMonitor = new TTLMonitor(ttlTimeout, this);
     }
 
     public boolean createQueue(String queueName) {

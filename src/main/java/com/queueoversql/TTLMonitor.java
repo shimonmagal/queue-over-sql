@@ -8,16 +8,19 @@ public class TTLMonitor
 {
     private final long ttlTimeout;
     private final QueueOverSql qos;
+    private final ScheduledExecutorService executor;
 
     TTLMonitor(long ttlTimeout, QueueOverSql qos)
     {
         this.ttlTimeout = ttlTimeout;
         this.qos = qos;
+
+        this.executor = Executors.newSingleThreadScheduledExecutor();
     }
 
     void init()
     {
-        ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
+         = Executors.newSingleThreadScheduledExecutor();
 
         executor.scheduleAtFixedRate(new Runnable() {
             @Override
