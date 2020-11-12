@@ -34,6 +34,12 @@ public class QueueOverSql {
         this.consumerRound = 0l;
 
         this.ttlMonitor = new TTLMonitor(ttlTimeout, this);
+        ttlMonitor.init();
+    }
+
+    public void destory()
+    {
+        ttlMonitor.desroty();
     }
 
     public boolean createQueue(String queueName) {
