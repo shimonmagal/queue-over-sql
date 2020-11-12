@@ -13,13 +13,18 @@ public class QueueOverSqlTests {
     private final static String jdbcUrl = "jdbc:h2:mem:queueOverSqlTest;DB_CLOSE_DELAY=-1";
 
     @Test
-    public void testCreateQueue()
-    {
-        QueueOverSql qos = new QueueOverSql(jdbcUrl, 30, TimeUnit.MINUTES, 20, TimeUnit.SECONDS);
+    public void testCreateQueue() {
+        QueueOverSql qos = null;
+        try {
+            QueueOverSql qos = new QueueOverSql(jdbcUrl, 30, TimeUnit.MINUTES, 20, TimeUnit.SECONDS);
 
-        boolean result = qos.createQueue("testQueue");
+            boolean result = qos.createQueue("testQueue");
 
-        Assertions.assertTrue(result);
+            Assertions.assertTrue(result);
+        }
+        finally {
+           qos.destory();
+        }
     }
 
     @Test
@@ -27,25 +32,30 @@ public class QueueOverSqlTests {
     {
         final String queueName = "testQueue";
 
-        QueueOverSql qos = new QueueOverSql(jdbcUrl, 30, TimeUnit.MINUTES, 20, TimeUnit.SECONDS);
+        QueueOverSql qos = null;
 
-        boolean result = qos.createQueue(queueName);
+        try {
+            qos = new QueueOverSql(jdbcUrl, 30, TimeUnit.MINUTES, 20, TimeUnit.SECONDS);
 
-        if (!result)
-        {
-            Assertions.fail();
+            boolean result = qos.createQueue(queueName);
+
+            if (!result) {
+                Assertions.fail();
+            }
+
+            Long id = qos.publishTask(queueName, "{task: handleEverything}");
+
+            if (id == null) {
+                Assertions.fail();
+            }
+
+            result = qos.deleteTask(queueName, id);
+
+            Assertions.assertTrue(result);
         }
-
-        Long id = qos.publishTask(queueName, "{task: handleEverything}");
-
-        if (id == null)
-        {
-            Assertions.fail();
+        finally {
+            qos.destory();
         }
-
-        result = qos.deleteTask(queueName, id);
-
-        Assertions.assertTrue(result);
     }
 
     @Test
@@ -53,80 +63,81 @@ public class QueueOverSqlTests {
     {
         final String queueName = "testQueue";
 
-        QueueOverSql qos = new QueueOverSql(jdbcUrl, 30, TimeUnit.MINUTES, 20, TimeUnit.SECONDS);
+        QueueOverSql qos = null;
+        try {
+            qos = new QueueOverSql(jdbcUrl, 30, TimeUnit.MINUTES, 20, TimeUnit.SECONDS);
 
-        boolean result = qos.createQueue(queueName);
+            boolean result = qos.createQueue(queueName);
 
-        if (!result)
-        {
-            Assertions.fail();
-        }
-
-        for (int i = 0 ; i < 10; i++)
-        {
-            Long id = qos.publishTask(queueName, "{task: handleEverything}");
-
-            if (id == null)
-            {
+            if (!result) {
                 Assertions.fail();
             }
+
+            for (int i = 0; i < 10; i++) {
+                Long id = qos.publishTask(queueName, "{task: handleEverything}");
+
+                if (id == null) {
+                    Assertions.fail();
+                }
+            }
+
+            List<Task> tasks = qos.consume(queueName, 3);
+
+            Assertions.assertEquals(3, tasks.size());
+
+            tasks = qos.consume(queueName, 25);
+
+            Assertions.assertEquals(7, tasks.size());
         }
-
-        List<Task> tasks = qos.consume(queueName, 3);
-
-        Assertions.assertEquals(3, tasks.size());
-
-        tasks = qos.consume(queueName, 25);
-
-        Assertions.assertEquals(7, tasks.size());
+        finally {
+            qos.destory();
+        }
     }
 
     @Test
-    public void testCreateInsertConsumeAndDelete()
-    {
+    public void testCreateInsertConsumeAndDelete() {
         final String queueName = "testQueue2";
 
-        QueueOverSql qos = new QueueOverSql(jdbcUrl, 30, TimeUnit.MINUTES, 60, TimeUnit.SECONDS);
+        QueueOverSql qos = null;
+        try {
+            qos = new QueueOverSql(jdbcUrl, 30, TimeUnit.MINUTES, 60, TimeUnit.SECONDS);
 
-        boolean result = qos.createQueue(queueName);
+            boolean result = qos.createQueue(queueName);
 
-        if (!result)
-        {
-            Assertions.fail();
-        }
-
-        for (int i = 0 ; i < 10; i++)
-        {
-            Long id = qos.publishTask(queueName, "{task: handleEverything}");
-
-            if (id == null)
-            {
+            if (!result) {
                 Assertions.fail();
             }
-        }
 
-        List<Task> tasks = qos.consume(queueName, 3);
+            for (int i = 0; i < 10; i++) {
+                Long id = qos.publishTask(queueName, "{task: handleEverything}");
 
-        Assertions.assertEquals(3, tasks.size());
+                if (id == null) {
+                    Assertions.fail();
+                }
+            }
 
-        List<Task> moreTasks = qos.consume(queueName, 25);
+            List<Task> tasks = qos.consume(queueName, 3);
 
-        Assertions.assertEquals(7, moreTasks.size());
+            Assertions.assertEquals(3, tasks.size());
 
-        for (Task task : tasks)
-        {
-            if (!qos.deleteTask(queueName, task.id))
-            {
-                Assertions.fail();
+            List<Task> moreTasks = qos.consume(queueName, 25);
+
+            Assertions.assertEquals(7, moreTasks.size());
+
+            for (Task task : tasks) {
+                if (!qos.deleteTask(queueName, task.id)) {
+                    Assertions.fail();
+                }
+            }
+
+            for (Task task : moreTasks) {
+                if (!qos.deleteTask(queueName, task.id)) {
+                    Assertions.fail();
+                }
             }
         }
-
-        for (Task task : moreTasks)
-        {
-            if (!qos.deleteTask(queueName, task.id))
-            {
-                Assertions.fail();
-            }
+        finally {
+            qos.destroy();
         }
     }
 }
