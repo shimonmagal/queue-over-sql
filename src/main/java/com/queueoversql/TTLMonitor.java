@@ -26,4 +26,9 @@ public class TTLMonitor
             }
         }, 0l, ttlTimeout, TimeUnit.MILLISECONDS);
     }
+
+    @Override
+    protected void finalize() throws Throwable {
+        super.finalize();
+    }
 }
