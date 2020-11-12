@@ -16,7 +16,7 @@ public class QueueOverSqlTests {
     public void testCreateQueue() {
         QueueOverSql qos = null;
         try {
-            QueueOverSql qos = new QueueOverSql(jdbcUrl, 30, TimeUnit.MINUTES, 20, TimeUnit.SECONDS);
+            qos = new QueueOverSql(jdbcUrl, 30, TimeUnit.MINUTES, 20, TimeUnit.SECONDS);
 
             boolean result = qos.createQueue("testQueue");
 
@@ -137,7 +137,7 @@ public class QueueOverSqlTests {
             }
         }
         finally {
-            qos.destroy();
+            qos.destory();
         }
     }
 }
