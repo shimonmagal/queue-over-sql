@@ -26,3 +26,13 @@ We support also timeout for a QueueOverSql instance that died an can no longer d
 TODO:
 Support hikary or maybe generic DataSources being passed
 Adjust to support other DBs rather than just h2 (should be really easy if anyone wants to adjust to other dbs)
+
+## How it works?
+For every queue is choose to create, there is a table formed.
+The table has 7 columns - id, messageBody, consumer_id, consumer_round, consume_time, publish_time, ttl
+
+id is just random and the messageBody is a string that is the task you wanted queue but just seralized into a string.
+When task is pubslished we give it its publish_time as now.
+
+When consume is invoked, it tries to fetch all the messages that either haven't been consumed or that timed out.
+Timed out couldn't mean either their consumer died (ttl) or that the consumer is alive but a long time has passed.
