@@ -25,3 +25,4 @@ We support also timeout for a QueueOverSql instance that died an can no longer d
 
 TODO:
 Support hikary or maybe generic DataSources being passed
+Adjust to support other DBs rather than just h2 (should be really easy if anyone wants to adjust to other dbs)
