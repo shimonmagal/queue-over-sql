@@ -37,4 +37,7 @@ When task is pubslished we give it its publish_time as now.
 When consume is invoked, it tries to fetch all the messages that either haven't been consumed or that timed out.
 Timed out couldn't mean either their consumer died (ttl) or that the consumer is alive but a long time has passed.
 Either way, we guarantee to always consume the oldest messages first.
+Lastly, how do we consume messages? We need to both mark and select. Since most SQL dbs don't support both update and select, we mark all the messages we want to consume.
+We give each such message the current consumer_round (which is an incremental number starting from 0) - so that we select exactly what we marked now and not get confused with previous markings done by this consumer in the past.
 
+Lastly, the code does in fact support multiple servers or multi-threading.
