@@ -36,3 +36,5 @@ When task is pubslished we give it its publish_time as now.
 
 When consume is invoked, it tries to fetch all the messages that either haven't been consumed or that timed out.
 Timed out couldn't mean either their consumer died (ttl) or that the consumer is alive but a long time has passed.
+Either way, we guarantee to always consume the oldest messages first.
+
