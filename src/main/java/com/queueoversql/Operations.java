@@ -16,7 +16,7 @@ public enum Operations {
     MARK_BEFORE_CONSUME("UPDATE $QUEUE SET consumer_id=?, consumer_round=?, consume_time=? WHERE id IN (" +
             "select id from (" +
             "   select * from (" +
-            "       select * from $QUEUE ORDER BY publish_time DESC" +
+            "       select * from $QUEUE ORDER BY publish_time ASC" +
             "   )" +
             "   WHERE consume_time is NULL OR consume_time < ? OR ttl < ?)" +
             "limit ?)"),
